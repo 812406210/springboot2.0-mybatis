@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="WARN" monitorInterval="30">
+<Properties>
+    <Property name="LOG_HOME">D:\commodity\logs</Property>
+    &lt;!&ndash;<Property name="LOG_HOME">logs</Property>&ndash;&gt;
+</Properties>
+
+<Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+        <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n"/>
+        &lt;!&ndash;<LevelRangeFilter minLevel="info" maxLevel="info" onMatch="ACCEPT" onMismatch="DENY"/>&ndash;&gt;
+    </Console>
+
+    &lt;!&ndash; Rolling File Appender &ndash;&gt;
+    <RollingRandomAccessFile name="stdout-log" fileName="${LOG_HOME}/stdout.log"
+                             filePattern="${LOG_HOME}/stdout-%d{yyyy-MM-dd}-%i.log">
+        <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n"/>
+        <Filters>
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Filters>
+        <Policies>
+            <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        </Policies>
+    </RollingRandomAccessFile>
+
+    <RollingRandomAccessFile name="stderr-log" fileName="${LOG_HOME}/stderr.log"
+                             filePattern="${LOG_HOME}/stderr-%d{yyyy-MM-dd}-%i.log">
+        <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n"/>
+        <Filters>
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Filters>
+        <Policies>
+            <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        </Policies>
+    </RollingRandomAccessFile>
+
+
+    <RollingRandomAccessFile name="returnLog"
+                             fileName="${LOG_HOME}/returnLog.log" immediateFlush="true"
+                             filePattern="${LOG_HOME}/returnLog.log.%d{yyyyMMdd}">
+        <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n"/>
+        <Policies>
+            <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        </Policies>
+    </RollingRandomAccessFile>
+
+
+    <RollingRandomAccessFile name="sqlLogAppender"
+                             fileName="${LOG_HOME}/sql.log" immediateFlush="true"
+                             filePattern="${LOG_HOME}/sql.log.%d{yyyyMMdd}">
+        <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n"/>
+        <Policies>
+            <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        </Policies>
+        <LevelRangeFilter minLevel="info" maxLevel="info" onMatch="ACCEPT" onMismatch="DENY"/>
+    </RollingRandomAccessFile>
+
+
+    <RollingRandomAccessFile name="httpReqLogAppender"
+                             fileName="${LOG_HOME}/httpReq.log" immediateFlush="true"
+                             filePattern="${LOG_HOME}/httpReq.log.%d{yyyyMMdd}">
+        <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] - %msg%n"/>
+        <Policies>
+            <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        </Policies>
+    </RollingRandomAccessFile>
+
+</Appenders>
+
+<Loggers>
+    <Logger name="com.cn.commodity" level="info" additivity="false">
+        <Appender-ref ref="stdout-log" level="info" />
+        <Appender-ref ref="stderr-log" level="error"/>
+    </Logger>
+
+    <logger name="returnLog" level="info"
+            additivity="false">
+        <appender-ref ref="returnLog"/>
+    </logger>
+
+    <logger name="httpReqLogger" level="DEBUG" additivity="false">
+        <appender-ref ref="httpReqLogAppender"/>
+    </logger>
+
+    <logger name="com.cn.commodity.dao" level="DEBUG" additivity="false">
+        <appender-ref ref="sqlLogAppender"/>
+    </logger>
+
+    <Root level="all" additivity="false">
+        <Appender-ref ref="Console"/>
+        <Appender-ref ref="stdout-log"/>
+        <Appender-ref ref="stderr-log"/>
+    </Root>
+</Loggers>
+</Configuration>
