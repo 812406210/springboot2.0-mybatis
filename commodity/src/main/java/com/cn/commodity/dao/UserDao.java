@@ -1,11 +1,12 @@
 package com.cn.commodity.dao;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.cn.commodity.entity.User;
 
-public interface UserDao {
+public interface UserDao  extends BaseMapper<User> {
     int deleteByPrimaryKey(Integer id);
 
-    int insert(User record);
+    Integer insert(User record);
 
     int insertSelective(User record);
 

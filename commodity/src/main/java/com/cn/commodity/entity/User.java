@@ -1,8 +1,14 @@
 package com.cn.commodity.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableName;
+import lombok.Data;
+
+@TableName(value = "user_t")
+@Data
 public class User {
     private Integer id;
-
+    @TableField(value = "user_name")
     private String userName;
 
     private String password;
