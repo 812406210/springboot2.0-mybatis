@@ -9,6 +9,7 @@ import com.cn.commodity.annotations.PassToken;
 import com.cn.commodity.annotations.UserLoginToken;
 import com.cn.commodity.entity.User;
 import com.cn.commodity.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -61,7 +62,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();
                 try {
                     jwtVerifier.verify(token);
-                } catch (JWTVerificationException e) {
+                } catch(ExpiredJwtException expired){
+                    //过期
+                    throw new RuntimeException("token已过期，请重新登陆");
+                }catch (JWTVerificationException e) {
+                    if(e.getMessage().contains("expired")){
+                        throw new RuntimeException("token已过期，请重新登陆");
+                    }
                     throw new RuntimeException("401");
                 }
                 return true;
