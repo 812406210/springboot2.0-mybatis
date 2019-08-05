@@ -5,6 +5,7 @@ import com.cn.commodity.entity.User;
 import com.cn.commodity.service.UserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("")
+
 public class UserController {
     @Resource
     private UserService userService;
@@ -30,6 +32,20 @@ public class UserController {
         int userId = Integer.parseInt(request.getParameter("id"));
         User user = this.userService.getUserById(userId);
         return user;
+    }
+
+    @RequestMapping("/addUser")
+    @ResponseBody
+    public void addUser(HttpServletRequest request){
+        for(int i=0;i<10000;i++ ){
+            User user = new User();
+            user.setId(i+1);
+            user.setAge(i);
+            user.setUserName("yangwj"+i);
+            user.setPassword("wj"+i);
+            userService.addUser(user);
+        }
+        return ;
     }
 
     @RequestMapping("/mybatisPlus")
